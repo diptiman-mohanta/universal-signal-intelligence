@@ -38,6 +38,8 @@ class Signal:
         Sampling rate in Hz (accessed via property for consistency).
     channels : int
         Number of channels (inferred from data shape if not provided).
+    signal_type : str
+        Domain identifier (e.g., 'audio', 'ecg', 'eeg', 'radar').
     metadata : dict
         Free-form dictionary for extra info (subject ID, device, labels, etc.).
     """
@@ -46,6 +48,7 @@ class Signal:
         self,
         data: np.ndarray,
         sampling_rate: int,
+        signal_type: str = "generic",
         channels: Optional[int] = None,
         metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
@@ -58,6 +61,8 @@ class Signal:
             The raw signal samples.
         sampling_rate : int
             Sampling frequency in Hertz (must be > 0).
+        signal_type : str, default="generic"
+            Domain identifier (e.g., 'audio', 'ecg', 'eeg', 'radar').
         channels : int, optional
             Explicit number of channels. If None, it's inferred from the data shape.
         metadata : dict, optional
@@ -68,9 +73,12 @@ class Signal:
             raise TypeError("Signal data must be a numpy.ndarray")
         if sampling_rate <= 0:
             raise ValueError("Sampling rate must be a positive integer")
+        if not isinstance(signal_type, str):
+            raise TypeError("signal_type must be a string")
 
         self.data = data
         self.sr = sampling_rate  # using short name internally, expose via property if needed
+        self.signal_type = signal_type.lower()
 
         # Infer channels if not given
         if channels is None:
@@ -113,6 +121,7 @@ class Signal:
         return Signal(
             data=self.data.copy(),
             sampling_rate=self.sr,
+            signal_type=self.signal_type,
             channels=self.channels,
             metadata=self.metadata.copy() if self.metadata else None,
         )
@@ -121,6 +130,7 @@ class Signal:
         """Convert key signal properties to a dictionary – great for logging or serialization."""
         return {
             "sampling_rate": self.sr,
+            "signal_type": self.signal_type,
             "channels": self.channels,
             "num_samples": self.num_samples,
             "duration_sec": self.duration,
@@ -133,6 +143,7 @@ class Signal:
         print("Signal Summary")
         print("-" * 40)
         print(f"Sampling Rate : {info['sampling_rate']} Hz")
+        print(f"Signal Type   : {info['signal_type']}")
         print(f"Channels      : {info['channels']}")
         print(f"Samples       : {info['num_samples']:,}")
         print(f"Duration      : {info['duration_sec']:.3f} seconds")

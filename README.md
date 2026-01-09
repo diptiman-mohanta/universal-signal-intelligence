@@ -12,7 +12,7 @@ universal-signal-intelligence/
 │   ├── __init__.py
 │   ├── base.py
 │   ├── audio.py
-│   ├── biomedicals.py
+│   ├── biomedicals.py (may be eeg.py, ecg.py, emg.py, ppg.py)
 │   └── radar.py
 │
 ├── dsp/

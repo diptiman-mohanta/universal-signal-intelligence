@@ -42,7 +42,7 @@ def butterworth_filter(
         New Signal object containing the filtered data.
     """ 
     data = signal.data
-    fs = signal.fs
+    fs = signal.sr
     nyquist = fs / 2.0
 
     if filter_type == "lowpass":
@@ -78,7 +78,7 @@ def butterworth_filter(
 
     return Signal(
         data=filtered,
-        fs=fs,
+        sampling_rate=fs,
         signal_type=signal.signal_type,
         metadata={**signal.metadata, "filter": f"butterworth_{filter_type}"},
     )
@@ -104,7 +104,7 @@ def notch_filter(
         New Signal object containing the filtered data.
     """
     data = signal.data
-    fs = signal.fs
+    fs = signal.sr
     nyquist = fs / 2.0
 
     if notch_freq >= nyquist:
@@ -115,11 +115,11 @@ def notch_filter(
     b, a = iirnotch(notch_freq, quality_factor, fs)
 
     # Apply the filter
-    filtered = filtfilt(b, a, data)
+    filtered = filtfilt(b, a, data, axis=-1)
 
     return Signal(
         data=filtered,
-        fs=fs,
+        sampling_rate=fs,
         signal_type=signal.signal_type,
         metadata={**signal.metadata, "filter": f"notch_{notch_freq}Hz"},
     )

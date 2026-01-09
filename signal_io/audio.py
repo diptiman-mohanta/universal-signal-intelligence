@@ -33,6 +33,7 @@ from signal_io.base import Signal
 def load_audio(
     filepath: str,
     target_sr: Optional[int] = None,
+    signal_type: str = "audio",
     mono: bool = True,
     metadata: Optional[Dict[str, Any]] = None,
 ) -> Signal:
@@ -52,6 +53,8 @@ def load_audio(
     mono : bool, default=True
         If True, converts multi-channel audio to mono by averaging channels.
         Set to False if you need to preserve stereo/multi-channel layout.
+    signal_type : str, default="audio"
+        Domain identifier for the signal (e.g., 'audio', 'ecg', etc.).
     metadata : dict, optional
         Extra metadata you want to attach (e.g., {"genre": "speech", "speaker": "001"}).
 
@@ -82,6 +85,7 @@ def load_audio(
     signal_metadata.update(
         {
             "source_file": filepath,
+            "signal_type": signal_type,
             "domain": "audio",
             "original_sr": sr if target_sr is None else "resampled",
         }

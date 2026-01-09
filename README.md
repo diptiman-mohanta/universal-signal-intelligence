@@ -12,17 +12,23 @@ universal-signal-intelligence/
 │   ├── __init__.py
 │   ├── base.py
 │   ├── audio.py
-│   ├── biomedicals.py (may be eeg.py, ecg.py, emg.py, ppg.py)
+│   ├── biomedical/
+│   │   ├── eeg.py
+│   │   ├── ecg.py
+│   │   ├── emg.py
+│   │   └── ppg.py
 │   └── radar.py
 │
 ├── dsp/
 │   ├── __init__.py
 │   ├── filters.py
 │   ├── normalization.py
-│   └── spectral.py
+│   ├── spectral.py
+│   └── transforms.py
 │
 ├── preprocessing/
-│   └── pipeline.py
+│   ├── pipeline.py
+│   └── augmentations.py
 │
 ├── configs/
 │   └── base.yaml
